@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
 
 import { ThemeToggle } from './ThemeToggle';
 
@@ -39,22 +38,29 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    setMounted(true);
+    Promise.resolve().then(() => {
+      setMounted(true);
+    });
   }, []);
 
   useEffect(() => {
     if (!mounted) return;
     const hour = new Date().getHours();
+    let greetText = '';
     if (lang === 'EN') {
-      if (hour < 12) setGreeting('Good Morning');
-      else if (hour < 18) setGreeting('Good Afternoon');
-      else setGreeting('Good Evening');
+      if (hour < 12) greetText = 'Good Morning';
+      else if (hour < 18) greetText = 'Good Afternoon';
+      else greetText = 'Good Evening';
     } else {
-      if (hour < 11) setGreeting('Selamat Pagi');
-      else if (hour < 15) setGreeting('Selamat Siang');
-      else if (hour < 18) setGreeting('Selamat Sore');
-      else setGreeting('Selamat Malam');
+      if (hour < 11) greetText = 'Selamat Pagi';
+      else if (hour < 15) greetText = 'Selamat Siang';
+      else if (hour < 18) greetText = 'Selamat Sore';
+      else greetText = 'Selamat Malam';
     }
+
+    Promise.resolve().then(() => {
+      setGreeting(greetText);
+    });
 
     const timer = setTimeout(() => {
       setHasSeenGreeting(true);
@@ -130,12 +136,12 @@ export default function Navbar() {
   const showMenu = hasSeenGreeting || isHovered;
 
   return (
-    <nav className="fixed top-8 left-1/2 -translate-x-1/2 z-[100000] max-w-[95vw]">
+    <nav className="fixed top-8 left-1/2 -translate-x-1/2 z-100000 max-w-[95vw]">
       <motion.div
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
         layout
-        className="flex items-center p-1.5 pr-2.5 rounded-full bg-background/40 border border-foreground/7 backdrop-blur-2xl cursor-default min-h-[48px] relative overflow-hidden gap-1.5"
+        className="flex items-center p-1.5 pr-2.5 rounded-full bg-background/40 border border-foreground/7 backdrop-blur-2xl cursor-default min-h-12 relative overflow-hidden gap-1.5"
         transition={{
           type: 'spring',
           stiffness: 400,
@@ -151,9 +157,9 @@ export default function Navbar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
-              className="flex items-center gap-3 px-4 min-w-[170px] justify-center"
+              className="flex items-center gap-3 px-4 min-w-42.5 justify-center"
             >
-              <div className="w-6 h-6 flex items-center justify-center rounded-[4px] bg-gradient-to-br from-orange-400 to-red-500 shadow-inner shrink-0">
+              <div className="w-6 h-6 flex items-center justify-center rounded-lg bg-linear-to-br from-orange-400 to-red-500 shadow-inner shrink-0">
                  <span className="text-[10px] filter drop-shadow-sm">☀️</span>
               </div>
               <span className="text-sm font-medium whitespace-nowrap tracking-tight">{greeting}</span>
@@ -224,8 +230,8 @@ export default function Navbar() {
             </motion.div>
           )}
         </AnimatePresence>
-        
-        <div className="w-[1px] h-4 bg-foreground/10 shrink-0 self-center" />
+
+        <div className="w-px h-4 bg-foreground/10 shrink-0 self-center" />
 
         <button
           onClick={() => {

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import DotField from "@/components/DotField";
 import PhysicsIcons from "@/components/PhysicsIcons";
 import { ArrowRight, FileText, ExternalLink } from "lucide-react";
@@ -301,7 +302,7 @@ const Home = () => {
       );
       setActiveProjectIdx(idx);
     });
-  }, [scrollYProgress, isProgrammatic]);
+  }, [scrollYProgress, isProgrammatic, PROJECTS]);
 
   const bgY = useTransform(scrollY, [0, 1000], [0, -250]);
   const bgOpacity = useTransform(scrollY, [0, 600], [1, 0.65]);
@@ -368,7 +369,7 @@ const Home = () => {
                   hover: { scale: 22 }
                 }}
                 transition={{ duration: 0.4, ease: [0.77, 0, 0.175, 1] }}
-                className="absolute right-[4px] top-1.5 w-9 h-9 bg-foreground rounded-full z-0 origin-center pointer-events-none"
+                className="absolute right-1 top-1.5 w-9 h-9 bg-foreground rounded-full z-0 origin-center pointer-events-none"
               />
 
               <span className="relative z-10 text-sm font-medium text-foreground group-hover:text-background transition-colors duration-400 tracking-tight ">
@@ -387,7 +388,7 @@ const Home = () => {
         id="about-section"
         className="relative z-10 min-h-screen px-8 sm:px-12 lg:px-24 py-32 flex flex-col justify-center"
       >
-        <div className="absolute top-0 left-0 right-0 h-[1px] bg-foreground/3 pointer-events-none z-10" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-foreground/3 pointer-events-none z-10" />
         <div className="absolute inset-0 bg-background -z-20 pointer-events-none" />
 
         <div className="max-w-6xl mx-auto w-full relative z-20">
@@ -424,7 +425,7 @@ const Home = () => {
                   className="relative group flex items-center gap-4 pl-1.5 pr-6 py-1.5 rounded-full border border-primary/10 bg-primary/2 backdrop-blur-md overflow-hidden transition-all duration-300 hover:border-primary/20 cursor-pointer pointer-events-auto"
                 >
                   <div
-                    className="absolute left-[4px] top-1.5 w-9 h-9 bg-foreground rounded-full z-0 origin-center pointer-events-none transition-transform duration-400 ease-[0.77,0,0.175,1] scale-1 group-hover:scale-[22]"
+                    className="absolute left-1 top-1.5 w-9 h-9 bg-foreground rounded-full z-0 origin-center pointer-events-none transition-transform duration-400 ease-[0.77,0,0.175,1] scale-1 group-hover:scale-[22]"
                   />
 
                   <div className="relative z-10 flex items-center justify-center w-9 h-9 rounded-full bg-foreground transition-all duration-300 group-hover:bg-foreground">
@@ -445,12 +446,15 @@ const Home = () => {
                   {SKILLS.map((skill) => (
                     <span
                       key={skill.name}
-                      className="tech-tag inline-flex items-center gap-2 px-3 py-1.5 text-xs rounded-lg border border-foreground/10 bg-foreground/[0.02] hover:bg-foreground/[0.05] hover:border-foreground/20 transition-all duration-300 cursor-default"
+                      className="tech-tag inline-flex items-center gap-2 px-3 py-1.5 text-xs rounded-lg border border-foreground/10 bg-foreground/2 hover:bg-foreground/5 hover:border-foreground/20 transition-all duration-300 cursor-default"
                     >
-                      <img
+                      <Image
                         src={skill.icon}
                         alt={`${skill.name} icon`}
                         className={`w-3.5 h-3.5 object-contain ${skill.invertInDark ? 'dark:invert' : ''}`}
+                        width={14}
+                        height={14}
+                        unoptimized
                       />
                       <span>{skill.name}</span>
                     </span>
@@ -480,7 +484,7 @@ const Home = () => {
         ref={containerRef}
         className="relative z-10 lg:h-[350vh] min-h-screen"
       >
-        <div className="absolute top-0 left-0 right-0 h-[1px] bg-foreground/3 pointer-events-none z-10" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-foreground/3 pointer-events-none z-10" />
         <div className="absolute inset-0 bg-background -z-20 pointer-events-none" />
 
         <div className={`hidden lg:flex w-full flex-col justify-start overflow-hidden pt-32 pb-12 z-20 ${isProgrammatic ? 'relative h-screen' : 'sticky top-0 h-screen'}`}>
@@ -498,8 +502,8 @@ const Home = () => {
           <div className="max-w-7xl mx-auto w-full px-8 sm:px-16 lg:px-24 grid grid-cols-12 gap-16 items-center">
 
             <div className="col-span-7 h-[60vh] flex flex-col justify-center relative overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-background to-transparent z-10 pointer-events-none" />
-              <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />
+              <div className="absolute top-0 left-0 right-0 h-24 bg-linear-to-b from-background to-transparent z-10 pointer-events-none" />
+              <div className="absolute bottom-0 left-0 right-0 h-24 bg-linear-to-t from-background to-transparent z-10 pointer-events-none" />
 
               <div
                 className="flex flex-col gap-0 transition-transform duration-700 ease-[0.25,1,0.5,1]"
@@ -510,7 +514,7 @@ const Home = () => {
                   return (
                     <div
                       key={project.title}
-                      className="h-[192px] flex flex-col justify-center transition-all duration-500 select-none cursor-pointer pointer-events-auto origin-left"
+                      className="h-48 flex flex-col justify-center transition-all duration-500 select-none cursor-pointer pointer-events-auto origin-left"
                       onClick={() => {
                         if (containerRef.current) {
                           const rect = containerRef.current.getBoundingClientRect();
@@ -545,7 +549,7 @@ const Home = () => {
             </div>
 
             <div className="col-span-5 pl-12 flex flex-col items-start justify-start py-4 self-start relative">
-              <div className="absolute left-0 top-4 w-[1px] h-[48vh] bg-foreground/5 pointer-events-none" />
+              <div className="absolute left-0 top-4 w-px h-[48vh] bg-foreground/5 pointer-events-none" />
 
               <div className="mb-6">
                 <span className="text-primary text-xs font-semibold tracking-widest uppercase mb-1.5 block">{t.works.detailsPrefix}</span>
@@ -587,13 +591,16 @@ const Home = () => {
                         return (
                           <span
                             key={tech}
-                            className="tech-tag inline-flex items-center gap-2 px-3 py-1.5 text-xs rounded-lg border border-foreground/10 bg-foreground/[0.02] hover:bg-foreground/[0.05] hover:border-foreground/20 transition-all duration-300 cursor-default"
+                            className="tech-tag inline-flex items-center gap-2 px-3 py-1.5 text-xs rounded-lg border border-foreground/10 bg-foreground/2 hover:bg-foreground/5 hover:border-foreground/20 transition-all duration-300 cursor-default"
                           >
                             {skillData && (
-                              <img
+                              <Image
                                 src={skillData.icon}
                                 alt={`${tech} icon`}
                                 className={`w-3.5 h-3.5 object-contain ${skillData.invertInDark ? 'dark:invert' : ''}`}
+                                width={14}
+                                height={14}
+                                unoptimized
                               />
                             )}
                             <span>{tech}</span>
@@ -670,13 +677,16 @@ const Home = () => {
                         return (
                           <span
                             key={tech}
-                            className="tech-tag inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] rounded-lg border border-foreground/10 bg-foreground/[0.02]"
+                            className="tech-tag inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] rounded-lg border border-foreground/10 bg-foreground/2"
                           >
                             {skillData && (
-                              <img
+                              <Image
                                 src={skillData.icon}
                                 alt={`${tech} icon`}
                                 className={`w-3 h-3 object-contain ${skillData.invertInDark ? 'dark:invert' : ''}`}
+                                width={12}
+                                height={12}
+                                unoptimized
                               />
                             )}
                             <span>{tech}</span>
@@ -708,7 +718,7 @@ const Home = () => {
         id="blog-section"
         className="relative z-10 min-h-screen px-8 sm:px-12 lg:px-24 py-32 flex flex-col justify-center animate-fade-in"
       >
-        <div className="absolute top-0 left-0 right-0 h-[1px] bg-foreground/3 pointer-events-none z-10" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-foreground/3 pointer-events-none z-10" />
         <div className="absolute inset-0 bg-background -z-20 pointer-events-none" />
         <div className="max-w-4xl mx-auto w-full relative z-20 flex flex-col items-center text-center">
           <span className="text-primary text-xs md:text-sm font-semibold tracking-widest uppercase mb-4 block">{t.journal.prefix}</span>
@@ -720,7 +730,7 @@ const Home = () => {
             )}
           </h2>
 
-          <p className="text-2xl md:text-4xl font-heading text-foreground/60 italic leading-relaxed max-w-2xl mt-4 font-serif">
+          <p className="text-2xl md:text-4xl text-foreground/60 italic leading-relaxed max-w-2xl mt-4 font-heading">
             {t.journal.quote}
           </p>
         </div>
@@ -730,7 +740,7 @@ const Home = () => {
         id="contact-section"
         className="relative z-10 min-h-screen px-8 sm:px-12 lg:px-24 py-32 flex flex-col justify-center"
       >
-        <div className="absolute top-0 left-0 right-0 h-[1px] bg-foreground/3 pointer-events-none z-10" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-foreground/3 pointer-events-none z-10" />
         <div className="absolute inset-0 bg-background -z-20 pointer-events-none" />
         <div className="max-w-7xl mx-auto w-full relative z-20">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">

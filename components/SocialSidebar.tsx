@@ -54,7 +54,7 @@ export default function SocialSidebar() {
         transition={{ delay: 1, duration: 0.8 }}
         className="flex md:flex-col gap-5 md:gap-6"
       >
-        {SOCIALS.map((social, i) => (
+        {SOCIALS.map((social) => (
           <motion.a
             key={social.label}
             href={social.href}
@@ -73,7 +73,7 @@ export default function SocialSidebar() {
         initial={{ height: 0 }}
         animate={{ height: 96 }}
         transition={{ delay: 1.5, duration: 1, ease: "easeInOut" }}
-        className="hidden md:block w-[1px] bg-primary/30"
+        className="hidden md:block w-px bg-primary/30"
       />
     </div>
   );

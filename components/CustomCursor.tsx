@@ -32,7 +32,10 @@ export default function CustomCursor() {
 
   useEffect(() => {
     const hoverMedia = window.matchMedia('(hover: hover)');
-    setHasHoverSupport(hoverMedia.matches);
+    const matches = hoverMedia.matches;
+    Promise.resolve().then(() => {
+      setHasHoverSupport(matches);
+    });
     
     const handleChange = (e: MediaQueryListEvent) => {
       setHasHoverSupport(e.matches);

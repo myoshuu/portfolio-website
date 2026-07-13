@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Matter from 'matter-js';
+import Image from 'next/image';
 
 const ICONS = [
   { label: 'TypeScript', color: '#3178C6', icon: 'https://cdn.simpleicons.org/typescript/white' },
@@ -17,6 +18,14 @@ const ICONS = [
   { label: 'Prisma', color: '#2D3748', icon: 'https://cdn.simpleicons.org/prisma/white' },
   { label: 'Express', color: '#000000', icon: 'https://cdn.simpleicons.org/express/white' },
 ];
+
+interface CustomBody extends Matter.Body {
+  customData: {
+    label: string;
+    color: string;
+    icon: string;
+  };
+}
 
 export default function PhysicsIcons() {
   const sceneRef = useRef<HTMLDivElement>(null);
@@ -44,13 +53,13 @@ export default function PhysicsIcons() {
     let width = sceneRef.current.clientWidth;
     let height = sceneRef.current.clientHeight;
     let isMobile = width < 768;
-    let iconSize = isMobile ? 56 : 80;
+    const iconSize = isMobile ? 56 : 80;
     let margin = isMobile ? 60 : 120;
     let minDist = isMobile ? 90 : 130;
 
     setDisplayIconSize(iconSize);
 
-    const iconBodies = ICONS.map((icon, i) => {
+    const iconBodies = ICONS.map((icon) => {
       const x = Math.random() * (width * 0.3) + (isMobile ? 50 : 150);
       const y = Math.random() * (height * 0.6) + height * 0.2;
 
@@ -66,7 +75,7 @@ export default function PhysicsIcons() {
         y: (Math.random() - 0.5) * 4
       });
 
-      (body as any).customData = icon;
+      (body as CustomBody).customData = icon;
       return body;
     });
 
@@ -154,11 +163,12 @@ export default function PhysicsIcons() {
     const hasHover = window.matchMedia('(hover: hover)').matches;
     let mouseConstraint: Matter.MouseConstraint | null = null;
 
-    if (hasHover) {
+     if (hasHover) {
       const mouse = Mouse.create(sceneRef.current);
+      const mouseObj = mouse as unknown as { mousewheel: EventListener };
 
-      sceneRef.current.removeEventListener('mousewheel', (mouse as any).mousewheel);
-      sceneRef.current.removeEventListener('DOMMouseScroll', (mouse as any).mousewheel);
+      sceneRef.current.removeEventListener('mousewheel', mouseObj.mousewheel);
+      sceneRef.current.removeEventListener('DOMMouseScroll', mouseObj.mousewheel);
 
       mouseConstraint = MouseConstraint.create(engine, {
         mouse: mouse,
@@ -177,8 +187,8 @@ export default function PhysicsIcons() {
     const update = () => {
       const updatedBodies = iconBodies.map((body) => ({
         id: body.id,
-        icon: (body as any).customData.icon,
-        color: (body as any).customData.color,
+        icon: (body as CustomBody).customData.icon,
+        color: (body as CustomBody).customData.color,
         x: body.position.x,
         y: body.position.y,
         angle: body.angle,
@@ -230,10 +240,13 @@ export default function PhysicsIcons() {
               willChange: 'transform',
             }}
           >
-            <img
+            <Image
               src={body.icon}
               alt="icon"
               className="w-full h-full object-contain pointer-events-none"
+              width={displayIconSize}
+              height={displayIconSize}
+              unoptimized
             />
           </div>
         ))}

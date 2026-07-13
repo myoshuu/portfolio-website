@@ -5,7 +5,7 @@ import './DotField.css';
 
 const TWO_PI = Math.PI * 2;
 
-interface DotFieldProps {
+interface DotFieldProps extends React.HTMLAttributes<HTMLDivElement> {
   dotRadius?: number;
   dotSpacing?: number;
   waveAmplitude?: number;
@@ -13,7 +13,6 @@ interface DotFieldProps {
   maxScale?: number;
   gradientFrom?: string;
   gradientTo?: string;
-  [key: string]: any;
 }
 
 const DotField: FC<DotFieldProps> = memo(({
@@ -27,11 +26,27 @@ const DotField: FC<DotFieldProps> = memo(({
   ...rest
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const dotsRef = useRef<any[]>([]);
+  const dotsRef = useRef<{ ax: number; ay: number }[]>([]);
   const mouseRef = useRef({ x: -9999, y: -9999 });
   const rafRef = useRef<number | null>(null);
   const sizeRef = useRef({ w: 0, h: 0, offsetX: 0, offsetY: 0 });
-  const propsRef = useRef<any>({});
+  const propsRef = useRef<{
+    dotRadius: number;
+    dotSpacing: number;
+    waveAmplitude: number;
+    cursorRadius: number;
+    maxScale: number;
+    gradientFrom: string;
+    gradientTo: string;
+  }>({
+    dotRadius,
+    dotSpacing,
+    waveAmplitude,
+    cursorRadius,
+    maxScale,
+    gradientFrom,
+    gradientTo,
+  });
   
   propsRef.current = { dotRadius, dotSpacing, waveAmplitude, cursorRadius, maxScale, gradientFrom, gradientTo };
 
