@@ -377,7 +377,6 @@ const Home = () => {
               <div className="absolute left-0 top-4 w-[1px] h-[48vh] bg-foreground/5 pointer-events-none" />
 
               <div className="mb-6">
-                <span className="text-primary text-xs font-semibold tracking-widest uppercase mb-1.5 block">02. Project details</span>
                 <h3 className="text-2xl lg:text-3xl font-heading tracking-tight leading-none text-foreground/95">
                   Project <span className="italic font-serif text-foreground/85">Details</span>
                 </h3>
@@ -553,7 +552,7 @@ const Home = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
 
             <div className="lg:col-span-7 flex flex-col items-start select-none">
-              <span className="text-foreground/45 text-[10px] font-mono tracking-wider uppercase mb-4 block">designed & developed by</span>
+              <span className="text-foreground/45 text-xs font-sans tracking-wide mb-4 block">Designed & Developed by</span>
               <div className="flex flex-col gap-0 font-sans font-light tracking-tight leading-[0.95] text-6xl md:text-8xl lg:text-9xl">
                 <span className="text-foreground/80">Joevano</span>
                 <span className="text-primary font-medium">Alfeus</span>
@@ -581,8 +580,8 @@ const Home = () => {
                 Every line of code has a reason.”
               </p>
 
-              <div className="flex flex-col gap-1 text-[10px] font-mono tracking-wider uppercase text-foreground/35 mt-6">
-                <span>salatiga, indonesia — 2026</span>
+              <div className="flex flex-col gap-1 text-xs font-sans tracking-wide text-foreground/35 mt-6">
+                <span>Salatiga, Indonesia — 2026</span>
               </div>
 
             </div>
