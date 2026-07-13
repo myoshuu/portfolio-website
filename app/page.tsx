@@ -172,7 +172,8 @@ const PROJECTS_ID = [
 const TRANSLATIONS = {
   EN: {
     hero: {
-      greeting: "Hello 👋, My name is",
+      greeting: "Hello",
+      nameIntroduce: ", My name is",
       cta: "Let's begin"
     },
     about: {
@@ -208,7 +209,8 @@ const TRANSLATIONS = {
   },
   ID: {
     hero: {
-      greeting: "Halo 👋, Nama saya",
+      greeting: "Halo",
+      nameIntroduce: ", Nama saya",
       cta: "Mari mulai"
     },
     about: {
@@ -339,7 +341,7 @@ const Home = () => {
       <section className="relative z-20 flex flex-col justify-center min-h-screen px-8 sm:px-12 lg:px-24 pointer-events-none">
         <div id="hero-text-area" className="flex flex-col pointer-events-auto w-fit pl-2 sm:pl-10 md:pl-26 lg:pl-42">
           <p className="text-lg md:text-xl mb-2 opacity-60">
-            {t.hero.greeting} <span className="animate-wave-scale">👋</span>
+            {t.hero.greeting} <span className="animate-wave-scale inline-block">👋</span>{t.hero.nameIntroduce}
           </p>
           <h1 className="text-5xl sm:text-7xl lg:text-9xl font-heading leading-[1.1] lg:leading-26 tracking-tighter">
             Joevano <br />

@@ -50,8 +50,8 @@ export default function RootLayout({
           enableSystem={false}
           enableColorScheme={false}
         >
-          <div className="theme-wipe-target fixed inset-0 z-[999999] pointer-events-none overflow-hidden" />
-          
+          <div className="theme-wipe-target fixed inset-0 z-999999 pointer-events-none overflow-hidden" />
+
           <Navbar />
           <SocialSidebar />
           <CustomCursor />
