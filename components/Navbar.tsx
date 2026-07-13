@@ -6,11 +6,18 @@ import { ChevronDown } from 'lucide-react';
 
 import { ThemeToggle } from './ThemeToggle';
 
-const NAV_LINKS = [
+const NAV_LINKS_EN = [
   { label: 'Home', href: '#' },
   { label: 'About', href: '#about-section' },
   { label: 'Work', href: '#work-section' },
   { label: 'Journal', href: '#blog-section' },
+];
+
+const NAV_LINKS_ID = [
+  { label: 'Beranda', href: '#' },
+  { label: 'Tentang', href: '#about-section' },
+  { label: 'Karya', href: '#work-section' },
+  { label: 'Jurnal', href: '#blog-section' },
 ];
 
 export default function Navbar() {
@@ -19,21 +26,42 @@ export default function Navbar() {
   const [greeting, setGreeting] = useState('');
   const [mounted, setMounted] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [lang, setLang] = useState<'EN' | 'ID'>('EN');
   const isScrollingRef = useRef(false);
 
   useEffect(() => {
+    const handleLangEvent = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      setLang(customEvent.detail.lang);
+    };
+    window.addEventListener('language-change', handleLangEvent);
+    return () => window.removeEventListener('language-change', handleLangEvent);
+  }, []);
+
+  useEffect(() => {
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     const hour = new Date().getHours();
-    if (hour < 12) setGreeting('Good Morning');
-    else if (hour < 18) setGreeting('Good Afternoon');
-    else setGreeting('Good Evening');
+    if (lang === 'EN') {
+      if (hour < 12) setGreeting('Good Morning');
+      else if (hour < 18) setGreeting('Good Afternoon');
+      else setGreeting('Good Evening');
+    } else {
+      if (hour < 11) setGreeting('Selamat Pagi');
+      else if (hour < 15) setGreeting('Selamat Siang');
+      else if (hour < 18) setGreeting('Selamat Sore');
+      else setGreeting('Selamat Malam');
+    }
 
     const timer = setTimeout(() => {
       setHasSeenGreeting(true);
     }, 3000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [mounted, lang]);
 
   useEffect(() => {
     if (!mounted) return;
@@ -139,14 +167,15 @@ export default function Navbar() {
               transition={{ duration: 0.25 }}
               className="flex items-center gap-0.5 sm:gap-1 px-1"
             >
-              {NAV_LINKS.map((link, idx) => {
+              {(lang === 'EN' ? NAV_LINKS_EN : NAV_LINKS_ID).map((link, idx) => {
                 const isActive = activeIndex === idx;
+                const linkHref = link.href;
                 return (
                   <a
                     key={link.label}
                     href={link.href}
                     onClick={(e) => {
-                      if (link.href === '#') {
+                      if (linkHref === '#') {
                         e.preventDefault();
                         isScrollingRef.current = true;
                         window.dispatchEvent(new CustomEvent('programmatic-scroll', { detail: { active: true, targetIdx: 0 } }));
@@ -156,12 +185,12 @@ export default function Navbar() {
                           isScrollingRef.current = false;
                           window.dispatchEvent(new CustomEvent('programmatic-scroll', { detail: { active: false } }));
                         }, 1000);
-                      } else if (link.href.startsWith('#')) {
+                      } else if (linkHref.startsWith('#')) {
                         e.preventDefault();
-                        const el = document.querySelector(link.href);
+                        const el = document.querySelector(linkHref);
                         if (el) {
                           isScrollingRef.current = true;
-                          const targetIdx = link.href === '#blog-section' ? 4 : 0;
+                          const targetIdx = linkHref === '#blog-section' ? 4 : 0;
                           window.dispatchEvent(new CustomEvent('programmatic-scroll', { detail: { active: true, targetIdx } }));
                           const targetTop = window.scrollY + el.getBoundingClientRect().top;
                           window.scrollTo({ top: targetTop, behavior: 'smooth' });
@@ -197,6 +226,19 @@ export default function Navbar() {
         </AnimatePresence>
         
         <div className="w-[1px] h-4 bg-foreground/10 shrink-0 self-center" />
+
+        <button
+          onClick={() => {
+            const nextLang = lang === 'EN' ? 'ID' : 'EN';
+            window.dispatchEvent(new CustomEvent('language-change', { detail: { lang: nextLang } }));
+          }}
+          className="flex items-center justify-center gap-1 px-1.5 h-8 rounded-full text-xs font-semibold text-foreground/45 hover:text-primary transition-all duration-300 cursor-pointer outline-none shrink-0"
+          aria-label="Toggle language"
+        >
+          <span className="text-sm leading-none mr-0.5">{lang === 'EN' ? '🇺🇸' : '🇮🇩'}</span>
+          <span className="text-[10px] font-bold tracking-wider">{lang}</span>
+        </button>
+
         <ThemeToggle />
       </motion.div>
     </nav>
