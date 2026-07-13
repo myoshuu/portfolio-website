@@ -137,7 +137,7 @@ export default function CustomCursor() {
       {/* Outer Ring */}
       <div
         ref={ringRef}
-        className={`fixed top-0 left-0 border border-primary/30 bg-primary/5 rounded-full pointer-events-none z-[9999] transition-[width,height,margin,opacity] duration-500 ease-out hidden md:block ${
+        className={`fixed top-0 left-0 border border-primary/30 bg-primary/5 rounded-full pointer-events-none z-[1000000] transition-[width,height,margin,opacity] duration-500 ease-out hidden md:block ${
           isHovering 
             ? 'w-16 h-16 -ml-8 -mt-8 opacity-100' 
             : 'w-8 h-8 -ml-4 -mt-4 opacity-0'
@@ -147,7 +147,7 @@ export default function CustomCursor() {
       {/* Inner Dot Wrapper - Laid out at full 60px size to guarantee high-resolution rendering */}
       <div
         ref={cursorRef}
-        className={`fixed top-0 left-0 w-[60px] h-[60px] -ml-[30px] -mt-[30px] pointer-events-none z-[9999] hidden md:block transition-[opacity,mix-blend-mode] duration-300 ${
+        className={`fixed top-0 left-0 w-[60px] h-[60px] -ml-[30px] -mt-[30px] pointer-events-none z-[1000000] hidden md:block transition-[opacity,mix-blend-mode] duration-300 ${
           isVisible ? 'opacity-100' : 'opacity-0'
         } ${
           isHovering && cursorType !== 'magnifier' ? 'mix-blend-difference' : 'mix-blend-normal'

@@ -21,6 +21,8 @@ const SKILLS = [
   { name: 'Prisma', icon: 'https://cdn.simpleicons.org/prisma', invertInDark: true },
   { name: 'Spring Boot', icon: 'https://cdn.simpleicons.org/springboot' },
   { name: 'MongoDB', icon: 'https://cdn.simpleicons.org/mongodb' },
+  { name: 'SQLite', icon: 'https://cdn.simpleicons.org/sqlite' },
+  { name: 'Docker', icon: 'https://cdn.simpleicons.org/docker' },
 ];
 
 const PROJECTS = [
@@ -180,7 +182,7 @@ const Home = () => {
 
       <section className="relative z-20 flex flex-col justify-center min-h-screen px-8 sm:px-12 lg:px-24 pointer-events-none">
         <div id="hero-text-area" className="flex flex-col pointer-events-auto w-fit pl-2 sm:pl-10 md:pl-26 lg:pl-42">
-          <p className="text-lg md:text-xl mb-2 opacity-60">Hello <span className="animate-wave-scale">👋</span>, My name</p>
+          <p className="text-lg md:text-xl mb-2 opacity-60">Hello <span className="animate-wave-scale">👋</span>, My name is</p>
           <h1 className="text-5xl sm:text-7xl lg:text-9xl font-heading leading-[1.1] lg:leading-26 tracking-tighter">
             Joevano <br />
             <span className="text-primary ml-4 md:ml-6">Pangangkat</span>
@@ -519,7 +521,7 @@ const Home = () => {
                               <img
                                 src={skillData.icon}
                                 alt={`${tech} icon`}
-                                className="w-3 h-3 object-contain dark:invert"
+                                className={`w-3 h-3 object-contain ${skillData.invertInDark ? 'dark:invert' : ''}`}
                               />
                             )}
                             <span>{tech}</span>
