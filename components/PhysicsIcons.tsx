@@ -53,9 +53,9 @@ export default function PhysicsIcons() {
     let width = sceneRef.current.clientWidth;
     let height = sceneRef.current.clientHeight;
     let isMobile = width < 768;
-    const iconSize = isMobile ? 56 : 80;
-    let margin = isMobile ? 60 : 120;
-    let minDist = isMobile ? 90 : 130;
+    let iconSize = isMobile ? 56 : 80;
+    let margin = isMobile ? 40 : 120;
+    let minDist = isMobile ? 68 : 130;
 
     setDisplayIconSize(iconSize);
 
@@ -124,18 +124,31 @@ export default function PhysicsIcons() {
           }
 
           if (heroTextData) {
-            const dx = body.position.x - heroTextData.centerX;
-            const dy = body.position.y - heroTextData.centerY;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            const repulsionRadius = Math.max(heroTextData.width, heroTextData.height) * 0.85;
+            const pad = iconSize / 2 + 15;
+            const left = heroTextData.centerX - heroTextData.width / 2 - pad;
+            const right = heroTextData.centerX + heroTextData.width / 2 + pad;
+            const top = heroTextData.centerY - heroTextData.height / 2 - pad;
+            const bottom = heroTextData.centerY + heroTextData.height / 2 + pad;
 
-            if (dist < repulsionRadius) {
-              const force = Math.pow(1 - dist / repulsionRadius, 2) * 0.002;
-              const angle = Math.atan2(dy, dx);
-              Matter.Body.applyForce(body, body.position, {
-                x: Math.cos(angle) * force,
-                y: Math.sin(angle) * force
-              });
+            if (body.position.x > left && body.position.x < right &&
+                body.position.y > top && body.position.y < bottom) {
+              const dxL = body.position.x - left;
+              const dxR = right - body.position.x;
+              const dyT = body.position.y - top;
+              const dyB = bottom - body.position.y;
+              const minDistVal = Math.min(dxL, dxR, dyT, dyB);
+              
+              const forceMagnitude = 0.003;
+              
+              if (minDistVal === dxL) {
+                Matter.Body.applyForce(body, body.position, { x: -forceMagnitude, y: 0 });
+              } else if (minDistVal === dxR) {
+                Matter.Body.applyForce(body, body.position, { x: forceMagnitude, y: 0 });
+              } else if (minDistVal === dyT) {
+                Matter.Body.applyForce(body, body.position, { x: 0, y: -forceMagnitude });
+              } else {
+                Matter.Body.applyForce(body, body.position, { x: 0, y: forceMagnitude });
+              }
             }
           }
 
@@ -205,11 +218,11 @@ export default function PhysicsIcons() {
       height = sceneRef.current.clientHeight;
       isMobile = width < 768;
 
-      const newIconSize = isMobile ? 56 : 80;
-      margin = isMobile ? 60 : 120;
-      minDist = isMobile ? 90 : 130;
+      iconSize = isMobile ? 56 : 80;
+      margin = isMobile ? 40 : 120;
+      minDist = isMobile ? 68 : 130;
 
-      setDisplayIconSize(newIconSize);
+      setDisplayIconSize(iconSize);
       heroTextData = getHeroTextRect();
     };
 

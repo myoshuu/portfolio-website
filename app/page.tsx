@@ -339,7 +339,7 @@ const Home = () => {
       </div>
 
       <section className="relative z-20 flex flex-col justify-center min-h-screen px-8 sm:px-12 lg:px-24 pointer-events-none">
-        <div id="hero-text-area" className="flex flex-col pointer-events-auto w-fit pl-2 sm:pl-10 md:pl-26 lg:pl-42">
+        <div id="hero-text-area" className="flex flex-col pointer-events-auto w-fit pl-10 md:pl-26 lg:pl-42">
           <p className="text-lg md:text-xl mb-2 opacity-60">
             {t.hero.greeting} <span className="animate-wave-scale inline-block">👋</span>{t.hero.nameIntroduce}
           </p>
