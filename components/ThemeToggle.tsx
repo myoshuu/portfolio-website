@@ -5,6 +5,8 @@ import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 import { motion } from "framer-motion"
 
+import { createPortal } from "react-dom"
+
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme()
   const [mounted, setMounted] = React.useState(false)
@@ -41,13 +43,13 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div className="fixed top-6 right-6 w-10 h-10 rounded-full bg-primary/10 border border-primary/20" />
+      <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 shrink-0" />
     )
   }
 
   return (
     <>
-      {isAnimating && (
+      {isAnimating && createPortal(
         <motion.div
           key="liquid-wipe"
           initial={{ x: "100%" }}
@@ -61,11 +63,12 @@ export function ThemeToggle() {
             inset: 0,
             width: "150vw", // Wider than screen for a smoother gradient sweep
             left: "-25vw",
-            zIndex: 100005, // High z-index to overlay navbar during wipe
+            zIndex: -15, // Between base background and dots
             background: `linear-gradient(to right, transparent, ${curtainColor} 15%, ${curtainColor} 85%, transparent)`,
             pointerEvents: "none",
           }}
-        />
+        />,
+        document.body
       )}
 
       <button
