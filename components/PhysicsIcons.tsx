@@ -55,7 +55,7 @@ export default function PhysicsIcons() {
     let isMobile = width < 768;
     let iconSize = isMobile ? 56 : 80;
     let margin = isMobile ? 40 : 120;
-    let minDist = isMobile ? 68 : 130;
+    let minDist = isMobile ? 95 : 130;
 
     setDisplayIconSize(iconSize);
 
@@ -114,7 +114,7 @@ export default function PhysicsIcons() {
             const distSq = dx * dx + dy * dy;
             if (distSq < minDist * minDist) {
               const dist = Math.sqrt(distSq) || 1;
-              const force = (minDist - dist) * 0.000008;
+              const force = (minDist - dist) * 0.000015;
               const angle = Math.atan2(dy, dx);
               const fx = Math.cos(angle) * force;
               const fy = Math.sin(angle) * force;
@@ -220,7 +220,7 @@ export default function PhysicsIcons() {
 
       iconSize = isMobile ? 56 : 80;
       margin = isMobile ? 40 : 120;
-      minDist = isMobile ? 68 : 130;
+      minDist = isMobile ? 95 : 130;
 
       setDisplayIconSize(iconSize);
       heroTextData = getHeroTextRect();
