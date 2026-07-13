@@ -47,7 +47,7 @@ const SOCIALS = [
 
 export default function SocialSidebar() {
   return (
-    <div className="fixed left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-18 bottom-6 md:bottom-0 z-40 flex md:flex-col items-center gap-4 md:gap-6 bg-background/30 backdrop-blur-xl md:bg-transparent px-5 py-2.5 md:px-0 md:py-0 rounded-full border border-foreground/5 md:border-none">
+    <div className="fixed left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-18 bottom-6 md:bottom-0 z-40 flex md:flex-col items-center gap-4 md:gap-6 bg-transparent px-5 py-2.5 md:px-0 md:py-0">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

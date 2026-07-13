@@ -8,12 +8,27 @@ export default function CustomCursor() {
   const ringRef = useRef<HTMLDivElement>(null);
   
   const [isHovering, setIsHovering] = useState(false);
+  const [cursorType, setCursorType] = useState<'default' | 'pointer' | 'magnifier'>('default');
   const [isVisible, setIsVisible] = useState(false);
   const [hasHoverSupport, setHasHoverSupport] = useState(false);
+  const [hoveredTag, setHoveredTag] = useState<{
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    html: string;
+  } | null>(null);
+
+  const hoveredTagRef = useRef(hoveredTag);
+  const cloneRef = useRef<HTMLDivElement>(null);
   
   const mousePos = useRef({ x: 0, y: 0 });
   const cursorCurrentPos = useRef({ x: 0, y: 0 });
   const ringCurrentPos = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    hoveredTagRef.current = hoveredTag;
+  }, [hoveredTag]);
 
   useEffect(() => {
     const hoverMedia = window.matchMedia('(hover: hover)');
@@ -41,13 +56,34 @@ export default function CustomCursor() {
 
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
+      
+      const isTechTag = target.closest('.tech-tag');
       const isInteractive = 
         target.closest('a') || 
         target.closest('button') || 
         target.closest('[role="button"]') ||
         window.getComputedStyle(target).cursor === 'pointer';
       
-      setIsHovering(!!isInteractive);
+      if (isTechTag) {
+        const rect = isTechTag.getBoundingClientRect();
+        setHoveredTag({
+          x: rect.left,
+          y: rect.top,
+          width: rect.width,
+          height: rect.height,
+          html: isTechTag.innerHTML,
+        });
+        setCursorType('magnifier');
+        setIsHovering(true);
+      } else if (isInteractive) {
+        setHoveredTag(null);
+        setCursorType('pointer');
+        setIsHovering(true);
+      } else {
+        setHoveredTag(null);
+        setCursorType('default');
+        setIsHovering(false);
+      }
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
@@ -55,7 +91,6 @@ export default function CustomCursor() {
 
     const animate = () => {
       // High responsiveness lerp values
-      // Inner Dot - 0.5 (Very snappy, almost 1:1 but with a hint of fluid smoothness)
       cursorCurrentPos.current.x += (mousePos.current.x - cursorCurrentPos.current.x) * 0.5;
       cursorCurrentPos.current.y += (mousePos.current.y - cursorCurrentPos.current.y) * 0.5;
 
@@ -69,6 +104,17 @@ export default function CustomCursor() {
 
       if (ringRef.current) {
         ringRef.current.style.transform = `translate3d(${ringCurrentPos.current.x}px, ${ringCurrentPos.current.y}px, 0)`;
+      }
+
+      if (cloneRef.current && hoveredTagRef.current) {
+        const tag = hoveredTagRef.current;
+        const S_visual = 1.35; // Visual zoom factor (1.35x)
+        
+        // Center calculation inside the high-res 60px base container
+        const left = 30 - (cursorCurrentPos.current.x - tag.x) * S_visual;
+        const top = 30 - (cursorCurrentPos.current.y - tag.y) * S_visual;
+        
+        cloneRef.current.style.transform = `translate3d(${left}px, ${top}px, 0) scale(${S_visual})`;
       }
 
       requestAnimationFrame(animate);
@@ -87,7 +133,7 @@ export default function CustomCursor() {
 
   return (
     <>
-      {/* Outer Ring - More dramatic expansion */}
+      {/* Outer Ring */}
       <div
         ref={ringRef}
         className={`fixed top-0 left-0 border border-primary/30 bg-primary/5 rounded-full pointer-events-none z-[9999] transition-[width,height,margin,opacity] duration-500 ease-out hidden md:block ${
@@ -97,30 +143,49 @@ export default function CustomCursor() {
         }`}
         style={{ willChange: 'transform' }}
       />
-      {/* Inner Dot - Becomes a "Difference" lens on hover */}
-      <motion.div
+      {/* Inner Dot Wrapper - Laid out at full 60px size to guarantee high-resolution rendering */}
+      <div
         ref={cursorRef}
-        className={`fixed top-0 left-0 rounded-full pointer-events-none z-[9999] hidden md:block ${
+        className={`fixed top-0 left-0 w-[60px] h-[60px] -ml-[30px] -mt-[30px] pointer-events-none z-[9999] hidden md:block transition-[opacity,mix-blend-mode] duration-300 ${
           isVisible ? 'opacity-100' : 'opacity-0'
-        } border transition-[background-color,border-color,mix-blend-mode] duration-300 ease-out ${
-          isHovering
-            ? 'bg-white border-transparent mix-blend-difference'
-            : 'bg-transparent border-primary mix-blend-normal'
+        } ${
+          isHovering && cursorType !== 'magnifier' ? 'mix-blend-difference' : 'mix-blend-normal'
         }`}
-        animate={{
-          width: isHovering ? 48 : 10,
-          height: isHovering ? 48 : 10,
-          marginLeft: isHovering ? -24 : -5,
-          marginTop: isHovering ? -24 : -5,
-        }}
-        transition={{
-          type: 'spring',
-          stiffness: 300,
-          damping: 30,
-          mass: 0.8
-        }}
-        style={{ willChange: 'transform, width, height, margin' }}
-      />
+        style={{ willChange: 'transform' }}
+      >
+        <motion.div
+          className={`relative w-full h-full rounded-full border pointer-events-none transition-[background-color,border-color] duration-300 ease-out flex items-center justify-center overflow-hidden ${
+            cursorType === 'magnifier'
+              ? 'bg-background border-foreground/15'
+              : (isHovering ? 'bg-white border-transparent' : 'bg-transparent border-primary')
+          }`}
+          animate={{
+            scale: cursorType === 'magnifier' ? 1 : (isHovering ? 48 / 60 : 10 / 60),
+          }}
+          transition={{
+            type: 'spring',
+            stiffness: 300,
+            damping: 30,
+            mass: 0.8
+          }}
+        >
+          {cursorType === 'magnifier' && hoveredTag && (
+            <motion.div
+              ref={cloneRef}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.15, ease: 'easeOut' }}
+              className="absolute left-0 top-0 pointer-events-none whitespace-nowrap origin-top-left inline-flex items-center gap-2 px-3 py-1.5 text-xs rounded-full border border-foreground/10 bg-background text-foreground"
+              style={{
+                width: `${hoveredTag.width}px`,
+                height: `${hoveredTag.height}px`,
+                willChange: 'transform, opacity',
+              }}
+              dangerouslySetInnerHTML={{ __html: hoveredTag.html }}
+            />
+          )}
+        </motion.div>
+      </div>
     </>
   );
 }

@@ -12,6 +12,7 @@ export function ThemeToggle() {
   const [mounted, setMounted] = React.useState(false)
   const [isAnimating, setIsAnimating] = React.useState(false)
   const [curtainColor, setCurtainColor] = React.useState("")
+  const [portalTargets, setPortalTargets] = React.useState<Element[]>([])
 
   React.useEffect(() => {
     // Small delay to ensure no sync state updates during mount
@@ -22,10 +23,14 @@ export function ThemeToggle() {
   const toggleTheme = () => {
     if (isAnimating) return;
 
+    // Get all page-level targets to apply the local stacking context sweep
+    const targets = Array.from(document.querySelectorAll(".theme-wipe-target"));
+    setPortalTargets(targets);
+
     const nextTheme = resolvedTheme === "dark" ? "light" : "dark";
 
     // Precise HEX matches for your OKLCH backgrounds
-    const nextColor = nextTheme === "dark" ? "#0d131f" : "#ffffff";
+    const nextColor = nextTheme === "dark" ? "#1a1e26" : "#ffffff";
 
     setCurtainColor(nextColor);
     setIsAnimating(true);
@@ -49,26 +54,28 @@ export function ThemeToggle() {
 
   return (
     <>
-      {isAnimating && createPortal(
-        <motion.div
-          key="liquid-wipe"
-          initial={{ x: "100%" }}
-          animate={{ x: "-100%" }}
-          transition={{
-            duration: 0.8,
-            ease: "easeInOut",
-          }}
-          style={{
-            position: "fixed",
-            inset: 0,
-            width: "150vw", // Wider than screen for a smoother gradient sweep
-            left: "-25vw",
-            zIndex: -15, // Between base background and dots
-            background: `linear-gradient(to right, transparent, ${curtainColor} 15%, ${curtainColor} 85%, transparent)`,
-            pointerEvents: "none",
-          }}
-        />,
-        document.body
+      {isAnimating && portalTargets.map((target, idx) => 
+        createPortal(
+          <motion.div
+            key={`wipe-${idx}`}
+            initial={{ x: "100%" }}
+            animate={{ x: "-100%" }}
+            transition={{
+              duration: 0.8,
+              ease: "easeInOut",
+            }}
+            style={{
+              position: "fixed",
+              inset: 0,
+              width: "150vw", // Wider than screen for a smoother gradient sweep
+              left: "-25vw",
+              zIndex: -15, // Between local background and local content
+              background: `linear-gradient(to right, transparent, ${curtainColor} 15%, ${curtainColor} 85%, transparent)`,
+              pointerEvents: "none",
+            }}
+          />,
+          target
+        )
       )}
 
       <button

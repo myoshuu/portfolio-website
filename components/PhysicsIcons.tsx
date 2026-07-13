@@ -9,7 +9,6 @@ const ICONS = [
   { label: 'React', color: '#61DAFB', icon: 'https://cdn.simpleicons.org/react/white' },
   { label: 'Next.js', color: '#000000', icon: 'https://cdn.simpleicons.org/nextdotjs/white' },
   { label: 'Tailwind', color: '#06B6D4', icon: 'https://cdn.simpleicons.org/tailwindcss/white' },
-  { label: 'Bun', color: '#000000', icon: 'https://cdn.simpleicons.org/bun/white' },
   { label: 'Node.js', color: '#339933', icon: 'https://cdn.simpleicons.org/nodedotjs/white' },
   { label: 'Go', color: '#00ADD8', icon: 'https://cdn.simpleicons.org/go/white' },
   { label: 'Spring Boot', color: '#6DB33F', icon: 'https://cdn.simpleicons.org/springboot/white' },
@@ -96,7 +95,7 @@ export default function PhysicsIcons() {
       const time = Date.now() * 0.001;
 
       iconBodies.forEach((body, i) => {
-        if (mouseConstraint.body !== body) {
+        if (!mouseConstraint || mouseConstraint.body !== body) {
           // 1. Fluid Bobbing
           const driftX = Math.sin(time * 0.4 + i) * 0.0006;
           const driftY = Math.cos(time * 0.25 + i) * 0.0006;
@@ -158,17 +157,27 @@ export default function PhysicsIcons() {
       });
     });
 
-    // Mouse control
-    const mouse = Mouse.create(sceneRef.current);
-    const mouseConstraint = MouseConstraint.create(engine, {
-      mouse: mouse,
-      constraint: {
-        stiffness: 0.2,
-        render: { visible: false },
-      },
-    });
+    // Mouse control - only enable mouse dragging on hover-capable pointer devices
+    const hasHover = window.matchMedia('(hover: hover)').matches;
+    let mouseConstraint: Matter.MouseConstraint | null = null;
 
-    World.add(world, mouseConstraint);
+    if (hasHover) {
+      const mouse = Mouse.create(sceneRef.current);
+
+      // Prevent Matter.js from blocking native page scroll/wheel
+      sceneRef.current.removeEventListener('mousewheel', (mouse as any).mousewheel);
+      sceneRef.current.removeEventListener('DOMMouseScroll', (mouse as any).mousewheel);
+
+      mouseConstraint = MouseConstraint.create(engine, {
+        mouse: mouse,
+        constraint: {
+          stiffness: 0.2,
+          render: { visible: false },
+        },
+      });
+
+      World.add(world, mouseConstraint);
+    }
 
     const runner = Runner.create();
     Runner.run(runner, engine);
@@ -195,11 +204,11 @@ export default function PhysicsIcons() {
       width = sceneRef.current.clientWidth;
       height = sceneRef.current.clientHeight;
       isMobile = width < 768;
-      
+
       const newIconSize = isMobile ? 56 : 80;
       margin = isMobile ? 60 : 120;
       minDist = isMobile ? 90 : 130;
-      
+
       setDisplayIconSize(newIconSize);
       heroTextData = getHeroTextRect();
     };
@@ -217,11 +226,11 @@ export default function PhysicsIcons() {
 
   return (
     <div ref={sceneRef} className="absolute inset-0 pointer-events-none overflow-hidden">
-      <div className="relative w-full h-full pointer-events-auto">
+      <div className="relative w-full h-full pointer-events-none">
         {bodies.map((body) => (
           <div
             key={body.id}
-            className="absolute flex items-center justify-center p-2 md:p-3 rounded-xl md:rounded-2xl shadow-xl select-none cursor-pointer active:cursor-grabbing border border-white/10"
+            className="absolute flex items-center justify-center p-2 md:p-3 rounded-xl md:rounded-2xl shadow-xl select-none cursor-pointer active:cursor-grabbing border border-white/10 pointer-events-auto"
             style={{
               width: `${displayIconSize}px`,
               height: `${displayIconSize}px`,

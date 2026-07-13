@@ -141,9 +141,14 @@
   
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
     cursor: auto !important;
   }
   
+  body, section, main, nav {
+    transition: background-color 0.8s ease-in-out, border-color 0.8s ease-in-out, color 0.8s ease-in-out;
+  }
+
   body {
     @apply bg-background text-foreground;
     cursor: auto !important;
