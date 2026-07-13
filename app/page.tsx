@@ -154,8 +154,7 @@ const Home = () => {
       <div className="absolute inset-0 bg-background -z-20" />
 
       <div className="fixed inset-0 z-0 pointer-events-none">
-        {/* Wipe target for Hero */}
-        <div className="theme-wipe-target absolute inset-0 z-0" />
+
 
         {/* Background Dot Pattern (Deeper parallax layer) */}
         <motion.div
@@ -235,8 +234,7 @@ const Home = () => {
 
         <div className="absolute inset-0 bg-background -z-20 pointer-events-none" />
 
-        {/* Wipe target for About */}
-        <div className="theme-wipe-target absolute inset-0 -z-10 pointer-events-none" />
+
 
         <div className="max-w-6xl mx-auto w-full relative z-20">
           <div className="flex flex-col mb-16 lg:max-w-[58.33%] w-full items-center text-center">
@@ -331,9 +329,7 @@ const Home = () => {
       >
         {/* Section top border line drawn as a child so it is covered by the theme wipe transition */}
         <div className="absolute top-0 left-0 right-0 h-[1px] bg-foreground/3 pointer-events-none z-10" />
-
         <div className="absolute inset-0 bg-background -z-20 pointer-events-none" />
-        <div className="theme-wipe-target absolute inset-0 -z-10 pointer-events-none" />
 
         {/* Desktop Layout - Pinned Sticky Wrapper */}
         <div className={`hidden lg:flex w-full flex-col justify-start overflow-hidden pt-32 pb-12 z-20 ${isProgrammatic ? 'relative h-screen' : 'sticky top-0 h-screen'}`}>
@@ -458,7 +454,7 @@ const Home = () => {
                       href={PROJECTS[activeProjectIdx].link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-full border border-primary/20 bg-primary/2 backdrop-blur-md hover:bg-foreground hover:text-background hover:border-transparent transition-all duration-300 w-fit pointer-events-auto shadow-sm mt-4"
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-full border border-primary/20 bg-primary/2 backdrop-blur-md hover:bg-foreground hover:text-background hover:border-transparent transition-all duration-300 w-fit pointer-events-auto mt-4"
                     >
                       <span>Live Demo</span>
                       <ExternalLink size={12} />
@@ -538,7 +534,7 @@ const Home = () => {
                       href={project.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-full border border-primary/20 bg-primary/2 w-fit pointer-events-auto shadow-sm mt-2"
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-full border border-primary/20 bg-primary/2 w-fit pointer-events-auto mt-2"
                     >
                       <span>Live Demo</span>
                       <ExternalLink size={10} />
@@ -558,8 +554,6 @@ const Home = () => {
       >
         <div className="absolute top-0 left-0 right-0 h-[1px] bg-foreground/3 pointer-events-none z-10" />
         <div className="absolute inset-0 bg-background -z-20 pointer-events-none" />
-        <div className="theme-wipe-target absolute inset-0 -z-10 pointer-events-none" />
-
         <div className="max-w-4xl mx-auto w-full relative z-20 flex flex-col items-center text-center">
           <span className="text-primary text-xs md:text-sm font-semibold tracking-widest uppercase mb-4 block">03. Journal</span>
           <h2 className="text-4xl md:text-6xl lg:text-7xl font-heading tracking-tight leading-none mb-12">
@@ -579,8 +573,6 @@ const Home = () => {
       >
         <div className="absolute top-0 left-0 right-0 h-[1px] bg-foreground/3 pointer-events-none z-10" />
         <div className="absolute inset-0 bg-background -z-20 pointer-events-none" />
-        <div className="theme-wipe-target absolute inset-0 -z-10 pointer-events-none" />
-
         <div className="max-w-7xl mx-auto w-full relative z-20">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
 

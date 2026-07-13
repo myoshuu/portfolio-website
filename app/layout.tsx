@@ -51,6 +51,9 @@ export default function RootLayout({
           enableSystem={false}
           enableColorScheme={false}
         >
+          {/* Global Theme Wipe Target */}
+          <div className="theme-wipe-target fixed inset-0 z-[999999] pointer-events-none overflow-hidden" />
+          
           <Navbar />
           <SocialSidebar />
           <CustomCursor />
