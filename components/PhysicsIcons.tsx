@@ -50,15 +50,14 @@ export default function PhysicsIcons() {
 
     setDisplayIconSize(iconSize);
 
-    // Create Icon Bodies
     const iconBodies = ICONS.map((icon, i) => {
       const x = Math.random() * (width * 0.3) + (isMobile ? 50 : 150);
       const y = Math.random() * (height * 0.6) + height * 0.2;
 
       const body = Bodies.rectangle(x, y, iconSize, iconSize, {
-        restitution: 1, // Full bounce for "liquid" feel
+        restitution: 1,
         friction: 0,
-        frictionAir: 0.1, // High air friction for silky movement
+        frictionAir: 0.1,
         chamfer: { radius: isMobile ? 8 : 12 },
       });
 
@@ -90,18 +89,15 @@ export default function PhysicsIcons() {
 
     let heroTextData = getHeroTextRect();
 
-    // Smooth physics logic
     Events.on(engine, 'beforeUpdate', () => {
       const time = Date.now() * 0.001;
 
       iconBodies.forEach((body, i) => {
         if (!mouseConstraint || mouseConstraint.body !== body) {
-          // 1. Fluid Bobbing
           const driftX = Math.sin(time * 0.4 + i) * 0.0006;
           const driftY = Math.cos(time * 0.25 + i) * 0.0006;
           Matter.Body.applyForce(body, body.position, { x: driftX, y: driftY });
 
-          // 2. Mutual Separation (Gentle)
           for (let j = i + 1; j < iconBodies.length; j++) {
             const other = iconBodies[j];
             const dx = other.position.x - body.position.x;
@@ -118,7 +114,6 @@ export default function PhysicsIcons() {
             }
           }
 
-          // 3. Smooth Hero Text Repulsion (Soft Avoidance)
           if (heroTextData) {
             const dx = body.position.x - heroTextData.centerX;
             const dy = body.position.y - heroTextData.centerY;
@@ -135,7 +130,6 @@ export default function PhysicsIcons() {
             }
           }
 
-          // 4. "Rubber" Boundaries (No hard bounce, just smooth turn-back)
           const boundaryForce = 0.0015;
           if (body.position.x < margin) {
             const f = Math.pow(1 - body.position.x / margin, 2) * boundaryForce;
@@ -157,14 +151,12 @@ export default function PhysicsIcons() {
       });
     });
 
-    // Mouse control - only enable mouse dragging on hover-capable pointer devices
     const hasHover = window.matchMedia('(hover: hover)').matches;
     let mouseConstraint: Matter.MouseConstraint | null = null;
 
     if (hasHover) {
       const mouse = Mouse.create(sceneRef.current);
 
-      // Prevent Matter.js from blocking native page scroll/wheel
       sceneRef.current.removeEventListener('mousewheel', (mouse as any).mousewheel);
       sceneRef.current.removeEventListener('DOMMouseScroll', (mouse as any).mousewheel);
 
@@ -182,7 +174,6 @@ export default function PhysicsIcons() {
     const runner = Runner.create();
     Runner.run(runner, engine);
 
-    // Sync loop
     const update = () => {
       const updatedBodies = iconBodies.map((body) => ({
         id: body.id,
@@ -198,7 +189,6 @@ export default function PhysicsIcons() {
 
     const animId = requestAnimationFrame(update);
 
-    // Handle Resize
     const handleResize = () => {
       if (!sceneRef.current) return;
       width = sceneRef.current.clientWidth;
@@ -215,7 +205,6 @@ export default function PhysicsIcons() {
 
     window.addEventListener('resize', handleResize);
 
-    // Cleanup
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', handleResize);
@@ -241,7 +230,6 @@ export default function PhysicsIcons() {
               willChange: 'transform',
             }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={body.icon}
               alt="icon"

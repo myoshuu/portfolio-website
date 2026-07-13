@@ -90,11 +90,9 @@ export default function CustomCursor() {
     window.addEventListener('mouseover', handleMouseOver);
 
     const animate = () => {
-      // High responsiveness lerp values
       cursorCurrentPos.current.x += (mousePos.current.x - cursorCurrentPos.current.x) * 0.5;
       cursorCurrentPos.current.y += (mousePos.current.y - cursorCurrentPos.current.y) * 0.5;
 
-      // Outer Ring - 0.25 (Snappy trail)
       ringCurrentPos.current.x += (mousePos.current.x - ringCurrentPos.current.x) * 0.25;
       ringCurrentPos.current.y += (mousePos.current.y - ringCurrentPos.current.y) * 0.25;
 
@@ -108,9 +106,8 @@ export default function CustomCursor() {
 
       if (cloneRef.current && hoveredTagRef.current) {
         const tag = hoveredTagRef.current;
-        const S_visual = 1.35; // Visual zoom factor (1.35x)
+        const S_visual = 1.35;
         
-        // Center calculation inside the high-res 60px base container, corrected for zoom scaling
         const left = (30 - (cursorCurrentPos.current.x - tag.x) * S_visual) / S_visual;
         const top = (30 - (cursorCurrentPos.current.y - tag.y) * S_visual) / S_visual;
         
@@ -134,7 +131,6 @@ export default function CustomCursor() {
 
   return (
     <>
-      {/* Outer Ring */}
       <div
         ref={ringRef}
         className={`fixed top-0 left-0 border border-primary/30 bg-primary/5 rounded-full pointer-events-none z-[1000000] transition-[width,height,margin,opacity] duration-500 ease-out hidden md:block ${
@@ -144,7 +140,6 @@ export default function CustomCursor() {
         }`}
         style={{ willChange: 'transform' }}
       />
-      {/* Inner Dot Wrapper - Laid out at full 60px size to guarantee high-resolution rendering */}
       <div
         ref={cursorRef}
         className={`fixed top-0 left-0 w-[60px] h-[60px] -ml-[30px] -mt-[30px] pointer-events-none z-[1000000] hidden md:block transition-[opacity,mix-blend-mode] duration-300 ${
@@ -177,7 +172,7 @@ export default function CustomCursor() {
               style={{
                 width: `${hoveredTag.width}px`,
                 height: `${hoveredTag.height}px`,
-                zoom: 1.35, // Forces native browser text re-rasterization at the target zoom level
+                zoom: 1.35,
                 willChange: 'transform, opacity',
                 opacity: isVisible ? 1 : 0,
               }}

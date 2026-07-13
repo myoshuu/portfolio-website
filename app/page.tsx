@@ -1,4 +1,5 @@
 'use client';
+
 import { useState, useEffect, useRef } from "react";
 import DotField from "@/components/DotField";
 import PhysicsIcons from "@/components/PhysicsIcons";
@@ -126,12 +127,10 @@ const Home = () => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
 
-      // If the works section is completely below the viewport (Home / About):
       if (rect.top > window.innerHeight) {
         setActiveProjectIdx(0);
         return;
       }
-      // If the works section is completely above the viewport (Journal / Contact):
       if (rect.bottom < 0) {
         setActiveProjectIdx(PROJECTS.length - 1);
         return;
@@ -156,9 +155,6 @@ const Home = () => {
       <div className="absolute inset-0 bg-background -z-20" />
 
       <div className="fixed inset-0 z-0 pointer-events-none">
-
-
-        {/* Background Dot Pattern (Deeper parallax layer) */}
         <motion.div
           style={{ y: bgY, opacity: bgOpacity }}
           className="absolute inset-0 z-5"
@@ -187,7 +183,6 @@ const Home = () => {
             Joevano <br />
             <span className="text-primary ml-4 md:ml-6">Pangangkat</span>
           </h1>
-
 
           <div className="mt-10">
             <motion.button
@@ -231,12 +226,8 @@ const Home = () => {
         id="about-section"
         className="relative z-10 min-h-screen px-8 sm:px-12 lg:px-24 py-32 flex flex-col justify-center"
       >
-        {/* Section top border line drawn as a child so it is covered by the theme wipe transition */}
         <div className="absolute top-0 left-0 right-0 h-[1px] bg-foreground/3 pointer-events-none z-10" />
-
         <div className="absolute inset-0 bg-background -z-20 pointer-events-none" />
-
-
 
         <div className="max-w-6xl mx-auto w-full relative z-20">
           <div className="flex flex-col mb-16 lg:max-w-[58.33%] w-full items-center text-center">
@@ -246,9 +237,7 @@ const Home = () => {
             </h2>
           </div>
 
-          {/* Grid Content */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
-            {/* Left Narrative Column */}
             <div className="lg:col-span-7 flex flex-col gap-6 text-base md:text-lg text-foreground/75 leading-relaxed font-sans text-justify">
               <p>
                 I am a passionate full-stack developer with 3+ years of experience building scalable web applications for academic and institutional projects. I specialize in end-to-end development, stakeholder collaboration, and transforming ideas into reliable, user-focused digital solutions.
@@ -267,7 +256,6 @@ const Home = () => {
                   rel="noopener noreferrer"
                   className="relative group flex items-center gap-4 pl-1.5 pr-6 py-1.5 rounded-full border border-primary/10 bg-primary/2 backdrop-blur-md overflow-hidden transition-all duration-300 hover:border-primary/20 cursor-pointer pointer-events-auto"
                 >
-                  {/* The "Liquid" background circle that spreads */}
                   <div
                     className="absolute left-[4px] top-1.5 w-9 h-9 bg-foreground rounded-full z-0 origin-center pointer-events-none transition-transform duration-400 ease-[0.77,0,0.175,1] scale-1 group-hover:scale-[22]"
                   />
@@ -283,7 +271,6 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Right Details/Focus Column */}
             <div className="lg:col-span-5 flex flex-col gap-8">
               <div>
                 <h3 className="text-xs font-semibold tracking-wider uppercase opacity-45 mb-4">Technical Stack</h3>
@@ -293,7 +280,6 @@ const Home = () => {
                       key={skill.name}
                       className="tech-tag inline-flex items-center gap-2 px-3 py-1.5 text-xs rounded-lg border border-foreground/10 bg-foreground/[0.02] hover:bg-foreground/[0.05] hover:border-foreground/20 transition-all duration-300 cursor-default"
                     >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={skill.icon}
                         alt={`${skill.name} icon`}
@@ -322,20 +308,15 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Selected Work Section */}
-      {/* Selected Works Section */}
       <section
         id="work-section"
         ref={containerRef}
         className="relative z-10 lg:h-[350vh] min-h-screen"
       >
-        {/* Section top border line drawn as a child so it is covered by the theme wipe transition */}
         <div className="absolute top-0 left-0 right-0 h-[1px] bg-foreground/3 pointer-events-none z-10" />
         <div className="absolute inset-0 bg-background -z-20 pointer-events-none" />
 
-        {/* Desktop Layout - Pinned Sticky Wrapper */}
         <div className={`hidden lg:flex w-full flex-col justify-start overflow-hidden pt-32 pb-12 z-20 ${isProgrammatic ? 'relative h-screen' : 'sticky top-0 h-screen'}`}>
-          {/* Header Title at the top center of the screen */}
           <div className="flex flex-col mb-12 items-center text-center w-full z-20">
             <span className="text-primary text-sm font-semibold tracking-widest uppercase mb-2">02. Selected Works</span>
             <h2 className="text-4xl md:text-6xl lg:text-7xl font-heading tracking-tight leading-none">
@@ -345,9 +326,7 @@ const Home = () => {
 
           <div className="max-w-7xl mx-auto w-full px-8 sm:px-16 lg:px-24 grid grid-cols-12 gap-16 items-center">
 
-            {/* Left Column: Pinned Vertical Title Slider */}
             <div className="col-span-7 h-[60vh] flex flex-col justify-center relative overflow-hidden">
-              {/* Fade masks */}
               <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-background to-transparent z-10 pointer-events-none" />
               <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />
 
@@ -394,9 +373,7 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Right Column: Sticky Project Details Panel */}
             <div className="col-span-5 pl-12 flex flex-col items-start justify-start py-4 self-start relative">
-              {/* Pinned absolute divider line of fixed height */}
               <div className="absolute left-0 top-4 w-[1px] h-[48vh] bg-foreground/5 pointer-events-none" />
 
               <div className="mb-6">
@@ -469,7 +446,6 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Mobile Layout - Vertical Stacked List */}
         <div className="lg:hidden block px-8 sm:px-12 py-24 max-w-xl mx-auto w-full relative z-20">
           <div className="flex flex-col mb-16 items-center text-center">
             <span className="text-primary text-xs font-semibold tracking-widest uppercase mb-2">02. Selected Works</span>
@@ -549,7 +525,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Blog Section */}
       <section
         id="blog-section"
         className="relative z-10 min-h-screen px-8 sm:px-12 lg:px-24 py-32 flex flex-col justify-center animate-fade-in"
@@ -568,7 +543,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Contact / Footer Section */}
       <section
         id="contact-section"
         className="relative z-10 min-h-screen px-8 sm:px-12 lg:px-24 py-32 flex flex-col justify-center"
@@ -578,7 +552,6 @@ const Home = () => {
         <div className="max-w-7xl mx-auto w-full relative z-20">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
 
-            {/* Left Column: Stacked Giant Name */}
             <div className="lg:col-span-7 flex flex-col items-start select-none">
               <span className="text-foreground/45 text-[10px] font-mono tracking-wider uppercase mb-4 block">designed & developed by</span>
               <div className="flex flex-col gap-0 font-sans font-light tracking-tight leading-[0.95] text-6xl md:text-8xl lg:text-9xl">
@@ -588,10 +561,8 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Right Column: Contact CTA and Editorial Info */}
             <div className="lg:col-span-5 flex flex-col justify-between h-full gap-12 lg:gap-24 py-8 lg:py-0 pl-8 lg:pl-16">
 
-              {/* Contact Link correlating to "Let's Begin" */}
               <div className="flex flex-col items-start gap-4">
                 <h3 className="text-4xl md:text-5xl font-heading tracking-tight leading-none text-foreground">
                   Let&apos;s <span className="italic font-serif text-foreground/80">begin.</span>
@@ -610,7 +581,6 @@ const Home = () => {
                 Every line of code has a reason.”
               </p>
 
-              {/* Location & Year */}
               <div className="flex flex-col gap-1 text-[10px] font-mono tracking-wider uppercase text-foreground/35 mt-6">
                 <span>salatiga, indonesia — 2026</span>
               </div>

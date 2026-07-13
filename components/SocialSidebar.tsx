@@ -71,7 +71,7 @@ export default function SocialSidebar() {
 
       <motion.div
         initial={{ height: 0 }}
-        animate={{ height: 96 }} // 24rem -> 96px
+        animate={{ height: 96 }}
         transition={{ delay: 1.5, duration: 1, ease: "easeInOut" }}
         className="hidden md:block w-[1px] bg-primary/30"
       />

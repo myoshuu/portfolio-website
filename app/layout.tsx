@@ -4,7 +4,6 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import CustomCursor from "@/components/CustomCursor";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import SocialSidebar from "@/components/SocialSidebar";
 import Navbar from "@/components/Navbar";
 
@@ -51,7 +50,6 @@ export default function RootLayout({
           enableSystem={false}
           enableColorScheme={false}
         >
-          {/* Global Theme Wipe Target */}
           <div className="theme-wipe-target fixed inset-0 z-[999999] pointer-events-none overflow-hidden" />
           
           <Navbar />

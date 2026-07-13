@@ -15,7 +15,6 @@ export function ThemeToggle() {
   const [portalTargets, setPortalTargets] = React.useState<Element[]>([])
 
   React.useEffect(() => {
-    // Small delay to ensure no sync state updates during mount
     const timer = setTimeout(() => setMounted(true), 0);
     return () => clearTimeout(timer);
   }, [])
@@ -23,24 +22,19 @@ export function ThemeToggle() {
   const toggleTheme = () => {
     if (isAnimating) return;
 
-    // Get all page-level targets to apply the local stacking context sweep
     const targets = Array.from(document.querySelectorAll(".theme-wipe-target"));
     setPortalTargets(targets);
 
     const nextTheme = resolvedTheme === "dark" ? "light" : "dark";
-
-    // Precise HEX matches for your OKLCH backgrounds
     const nextColor = nextTheme === "dark" ? "#1a1e26" : "#ffffff";
 
     setCurtainColor(nextColor);
     setIsAnimating(true);
 
-    // Switch theme exactly when the \"liquid\" center of the wipe passes through
     setTimeout(() => {
       setTheme(nextTheme);
     }, 400);
 
-    // Reset after the full sweep
     setTimeout(() => {
       setIsAnimating(false);
     }, 800);
@@ -67,7 +61,7 @@ export function ThemeToggle() {
             style={{
               position: "absolute",
               inset: 0,
-              width: "150vw", // Wider than screen for a smoother gradient sweep
+              width: "150vw",
               left: "-25vw",
               background: `linear-gradient(to right, transparent, ${curtainColor} 15%, ${curtainColor} 85%, transparent)`,
               pointerEvents: "none",

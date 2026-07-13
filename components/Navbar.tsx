@@ -18,7 +18,7 @@ export default function Navbar() {
   const [hasSeenGreeting, setHasSeenGreeting] = useState(false);
   const [greeting, setGreeting] = useState('');
   const [mounted, setMounted] = useState(false);
-   const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
   const isScrollingRef = useRef(false);
 
   useEffect(() => {
@@ -28,7 +28,6 @@ export default function Navbar() {
     else if (hour < 18) setGreeting('Good Afternoon');
     else setGreeting('Good Evening');
 
-    // Show greeting for 3 seconds then transition to menu
     const timer = setTimeout(() => {
       setHasSeenGreeting(true);
     }, 3000);
@@ -36,7 +35,6 @@ export default function Navbar() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Scroll Spy using IntersectionObserver
   useEffect(() => {
     if (!mounted) return;
 
@@ -147,34 +145,34 @@ export default function Navbar() {
                   <a
                     key={link.label}
                     href={link.href}
-                      onClick={(e) => {
-                        if (link.href === '#') {
-                          e.preventDefault();
+                    onClick={(e) => {
+                      if (link.href === '#') {
+                        e.preventDefault();
+                        isScrollingRef.current = true;
+                        window.dispatchEvent(new CustomEvent('programmatic-scroll', { detail: { active: true, targetIdx: 0 } }));
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        setActiveIndex(0);
+                        setTimeout(() => {
+                          isScrollingRef.current = false;
+                          window.dispatchEvent(new CustomEvent('programmatic-scroll', { detail: { active: false } }));
+                        }, 1000);
+                      } else if (link.href.startsWith('#')) {
+                        e.preventDefault();
+                        const el = document.querySelector(link.href);
+                        if (el) {
                           isScrollingRef.current = true;
-                          window.dispatchEvent(new CustomEvent('programmatic-scroll', { detail: { active: true, targetIdx: 0 } }));
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
-                          setActiveIndex(0);
+                          const targetIdx = link.href === '#blog-section' ? 4 : 0;
+                          window.dispatchEvent(new CustomEvent('programmatic-scroll', { detail: { active: true, targetIdx } }));
+                          const targetTop = window.scrollY + el.getBoundingClientRect().top;
+                          window.scrollTo({ top: targetTop, behavior: 'smooth' });
+                          setActiveIndex(idx);
                           setTimeout(() => {
                             isScrollingRef.current = false;
                             window.dispatchEvent(new CustomEvent('programmatic-scroll', { detail: { active: false } }));
                           }, 1000);
-                        } else if (link.href.startsWith('#')) {
-                          e.preventDefault();
-                          const el = document.querySelector(link.href);
-                          if (el) {
-                            isScrollingRef.current = true;
-                            const targetIdx = link.href === '#blog-section' ? 4 : 0;
-                            window.dispatchEvent(new CustomEvent('programmatic-scroll', { detail: { active: true, targetIdx } }));
-                            const targetTop = window.scrollY + el.getBoundingClientRect().top;
-                            window.scrollTo({ top: targetTop, behavior: 'smooth' });
-                            setActiveIndex(idx);
-                            setTimeout(() => {
-                              isScrollingRef.current = false;
-                              window.dispatchEvent(new CustomEvent('programmatic-scroll', { detail: { active: false } }));
-                            }, 1000);
-                          }
                         }
-                      }}
+                      }
+                    }}
                     className={`relative px-3 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 whitespace-nowrap outline-none ${
                       isActive ? 'text-foreground' : 'text-foreground/60 hover:text-foreground/80'
                     }`}
