@@ -110,11 +110,12 @@ export default function CustomCursor() {
         const tag = hoveredTagRef.current;
         const S_visual = 1.35; // Visual zoom factor (1.35x)
         
-        // Center calculation inside the high-res 60px base container
-        const left = 30 - (cursorCurrentPos.current.x - tag.x) * S_visual;
-        const top = 30 - (cursorCurrentPos.current.y - tag.y) * S_visual;
+        // Center calculation inside the high-res 60px base container, corrected for zoom scaling
+        const left = (30 - (cursorCurrentPos.current.x - tag.x) * S_visual) / S_visual;
+        const top = (30 - (cursorCurrentPos.current.y - tag.y) * S_visual) / S_visual;
         
-        cloneRef.current.style.transform = `translate3d(${left}px, ${top}px, 0) scale(${S_visual})`;
+        cloneRef.current.style.left = `${left}px`;
+        cloneRef.current.style.top = `${top}px`;
       }
 
       requestAnimationFrame(animate);
@@ -154,10 +155,10 @@ export default function CustomCursor() {
         style={{ willChange: 'transform' }}
       >
         <motion.div
-          className={`relative w-full h-full rounded-full border pointer-events-none transition-[background-color,border-color] duration-300 ease-out flex items-center justify-center overflow-hidden ${
+          className={`relative w-full h-full rounded-full border-2 pointer-events-none transition-[background-color,border-color] duration-300 ease-out flex items-center justify-center overflow-hidden ${
             cursorType === 'magnifier'
-              ? 'bg-background border-foreground/15'
-              : (isHovering ? 'bg-white border-transparent' : 'bg-transparent border-primary')
+              ? 'bg-background border-foreground/15 dark:border-primary'
+              : (isHovering ? 'bg-white border-transparent' : 'bg-transparent border-primary dark:border-sky-400')
           }`}
           animate={{
             scale: cursorType === 'magnifier' ? 1 : (isHovering ? 48 / 60 : 10 / 60),
@@ -170,16 +171,15 @@ export default function CustomCursor() {
           }}
         >
           {cursorType === 'magnifier' && hoveredTag && (
-            <motion.div
+            <div
               ref={cloneRef}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.15, ease: 'easeOut' }}
-              className="absolute left-0 top-0 pointer-events-none whitespace-nowrap origin-top-left inline-flex items-center gap-2 px-3 py-1.5 text-xs rounded-full border border-foreground/10 bg-background text-foreground"
+              className="absolute left-0 top-0 pointer-events-none whitespace-nowrap origin-top-left inline-flex items-center gap-2 px-3 py-1.5 text-xs rounded-full border border-foreground/10 bg-background text-foreground transition-opacity duration-150 ease-out"
               style={{
                 width: `${hoveredTag.width}px`,
                 height: `${hoveredTag.height}px`,
+                zoom: 1.35, // Forces native browser text re-rasterization at the target zoom level
                 willChange: 'transform, opacity',
+                opacity: isVisible ? 1 : 0,
               }}
               dangerouslySetInnerHTML={{ __html: hoveredTag.html }}
             />

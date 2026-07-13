@@ -137,6 +137,11 @@
 @layer base {
   * {
     @apply border-border;
+    cursor: auto !important;
+  }
+  
+  a, button, [role="button"], select, input, textarea {
+    cursor: pointer !important;
   }
   
   html {
@@ -152,5 +157,6 @@
   body {
     @apply bg-background text-foreground;
     cursor: auto !important;
+    overflow-x: hidden;
   }
 }

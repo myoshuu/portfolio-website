@@ -35,7 +35,7 @@ export function ThemeToggle() {
     setCurtainColor(nextColor);
     setIsAnimating(true);
 
-    // Switch theme exactly when the "liquid" center of the wipe passes through
+    // Switch theme exactly when the \"liquid\" center of the wipe passes through
     setTimeout(() => {
       setTheme(nextTheme);
     }, 400);
@@ -65,11 +65,10 @@ export function ThemeToggle() {
               ease: "easeInOut",
             }}
             style={{
-              position: "fixed",
+              position: "absolute",
               inset: 0,
               width: "150vw", // Wider than screen for a smoother gradient sweep
               left: "-25vw",
-              zIndex: -15, // Between local background and local content
               background: `linear-gradient(to right, transparent, ${curtainColor} 15%, ${curtainColor} 85%, transparent)`,
               pointerEvents: "none",
             }}
